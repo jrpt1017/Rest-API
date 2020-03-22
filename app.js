@@ -1,20 +1,25 @@
+/* eslint-disable import/newline-after-import */
+
 const express = require('express');
-
 const app = express();
+const mongoose = require('mongoose');
 const port = process.env.port || 3000;
-const userRouter = express.Router();
+const bodyParser = require('body-parser');
 
-userRouter.route('/users')
-  .get((req, res) => {
-    const response = 'Hello';
-    res.json(response);
-  });
+// Middlewares
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
 
-app.use('/api', userRouter);
+// Routes
+const userRouter = require('./routes/userRouter');
+app.use('/users', userRouter);
 
-app.get('/', (req, res) => {
-  res.send('Welcome to Express! hehe11');
-});
+mongoose.connect('mongodb://localhost/users', { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', (error) => console.error(error));
+db.once('open', () => console.log('Connected to database'));
 
 app.listen(port, () => {
   console.log(`Successfully Running in Port: ${port}`);
