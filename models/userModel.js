@@ -1,9 +1,10 @@
+/* eslint-disable import/newline-after-import */
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
   name: {
     type: String,
-    required: false,
+    required: true,
   },
   age: {
     type: Number,
